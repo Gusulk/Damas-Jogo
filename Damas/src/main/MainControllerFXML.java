@@ -53,7 +53,6 @@ public class MainControllerFXML implements Initializable {
     private final DataFormat CircleFormat = new DataFormat("Circle");
 
     private Tabuleiro tab;
- 
 
 //    @FXML
 //    void onClickBoard(MouseEvent event) {
@@ -69,13 +68,13 @@ public class MainControllerFXML implements Initializable {
 //    }
     public void createBoard() {
 
-        board.setPrefSize(800, 800);
+        board.setPrefSize(640, 640);
 //        board.setRotate(0);
         int count = 1;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 StackPane p = new StackPane();
-                p.setPrefSize(100, 100);
+                p.setPrefSize(80, 80);
 
 //                p.setOnMouseClicked(e -> {
 //                    System.out.println("opa");
@@ -129,7 +128,7 @@ public class MainControllerFXML implements Initializable {
                     p.getChildren().remove(dragCircle);
                     pane.getChildren().add(dragCircle);
                     tab.removeDama(crow, ccol);
-                    tab.putDama(nrow, ncol,d.getColor());
+                    tab.putDama(nrow, ncol, d.getColor());
                 }
                 e.setDropCompleted(true);
                 dragCircle = null;
@@ -137,11 +136,24 @@ public class MainControllerFXML implements Initializable {
         });
     }
 
+    public void moveDama(int crow, int ccol, int nrow, int ncol) {
+        StackPane cpane = (StackPane) getNode(crow,ccol);
+        StackPane rpane = (StackPane) getNode(nrow,ncol);
+        
+        Circle c = (Circle) cpane.getChildren().get(0);
+        Dama d = tab.findDama(crow, ccol);
+        cpane.getChildren().remove(c);
+        rpane.getChildren().add(c);
+        tab.removeDama(crow, ccol);
+        tab.putDama(nrow, ncol, d.getColor());
+      
+    }
+
     public void setDamas(ArrayList<Dama> damas) {
 
         for (Dama d : damas) {
             StackPane p = (StackPane) getNode(d.getRow(), d.getCol());
-            Circle c = new Circle(40);
+            Circle c = new Circle(30);
             Color colorFill;
             if (d.getColor().equals("RED")) {
                 colorFill = Color.RED;
@@ -176,7 +188,7 @@ public class MainControllerFXML implements Initializable {
         // TODO
         createBoard();
         startGame();
-
+        
     }
 
 }
