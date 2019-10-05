@@ -20,6 +20,7 @@ import javafx.geometry.VerticalDirection;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -35,6 +36,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import tabuleiro.Dama;
+import tabuleiro.PColor;
 import tabuleiro.Tabuleiro;
 
 /**
@@ -125,15 +127,28 @@ public class MainControllerFXML implements Initializable {
                 int nrow = GridPane.getRowIndex(pane);
                 Dama d = tab.findDama(crow, ccol);
                 if (tab.verificaMovimento(d, nrow, ncol)) {
-                    p.getChildren().remove(dragCircle);
-                    pane.getChildren().add(dragCircle);
-                    tab.removeDama(crow, ccol);
-                    tab.putDama(nrow, ncol, d.getColor());
+                   moveDama(crow,ccol,nrow,ncol);
+                }
+                Dama tdama = tab.verificaRemocao(d, nrow, ncol);
+                if(tdama != null){
+                    moveDama(crow,ccol,nrow,ncol);
+                    removeDama(tdama.getRow(),tdama.getCol());
                 }
                 e.setDropCompleted(true);
                 dragCircle = null;
             }
         });
+    }
+    
+    public void refreshTable(){
+        
+    }
+    
+    public void removeDama(int row, int col){
+        StackPane pane = (StackPane) getNode(row,col);
+        Circle c = (Circle) pane.getChildren().get(0);
+        pane.getChildren().remove(c);
+        tab.removeDama(row, col);
     }
 
     public void moveDama(int crow, int ccol, int nrow, int ncol) {
@@ -155,17 +170,13 @@ public class MainControllerFXML implements Initializable {
             StackPane p = (StackPane) getNode(d.getRow(), d.getCol());
             Circle c = new Circle(30);
             Color colorFill;
-            if (d.getColor().equals("RED")) {
-                colorFill = Color.RED;
-            } else {
-                colorFill = Color.BLUE;
-            }
+            colorFill = d.getColor().equals(PColor.RED)? Color.RED : Color.BLUE;
             c.setFill(colorFill);
             c.setStroke(Color.GRAY);
+            
             c.setOnDragDetected((event) -> {
                 Dragboard db = c.startDragAndDrop(TransferMode.MOVE);
                 db.setDragView(c.snapshot(null, null));
-
                 ClipboardContent cc = new ClipboardContent();
                 cc.put(CircleFormat, " ");
                 db.setContent(cc);

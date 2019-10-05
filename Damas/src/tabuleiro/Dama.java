@@ -13,16 +13,17 @@ public class Dama {
     private int row;
     private int col;
     private boolean dama;
-    private String color;
+    private PColor color;
     
-    public Dama(int row,int col,String color){
+  
+    public Dama(int row,int col,PColor color){
         this.row = row;
         this.col = col;
         this.color = color;
         dama = false;
     }
 
-    public String getColor() {
+    public PColor getColor() {
         return color;
     }
     

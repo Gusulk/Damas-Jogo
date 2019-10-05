@@ -24,18 +24,18 @@ public class Tabuleiro {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if(i%2==0 && j%2==0){
-                  putDama(i, j,"RED");  
+                  putDama(i, j,PColor.RED);  
                 }else if(i%2==1 && j%2==1){
-                  putDama(i, j,"RED");    
+                  putDama(i, j,PColor.RED);    
                 }
             }
         }
         for (int i = 7; i > 4; i--) {
             for (int j = 0; j < 8; j++) {
                 if(i%2==0 && j%2==0){
-                  putDama(i, j,"BLUE");  
+                  putDama(i, j,PColor.BLUE);  
                 }else if(i%2==1 && j%2==1){
-                  putDama(i, j,"BLUE");    
+                  putDama(i, j,PColor.BLUE);    
                 }
             }
         }
@@ -45,7 +45,7 @@ public class Tabuleiro {
         return damas;
     }
 
-    public void putDama(int row, int col,String color) {
+    public void putDama(int row, int col,PColor color) {
         Dama d = new Dama(row, col,color);
         damas.add(d);
     }
@@ -85,5 +85,24 @@ public class Tabuleiro {
         
         
        return false;
+    }
+    
+    public Dama verificaRemocao(Dama d,int nrow, int ncol){
+       
+        int row = d.getRow();
+        int col = d.getCol();
+    
+
+        if(d.isDama()){ // tem q fazer aqui pra quando for dama rip
+            
+        }else{
+           if((row+2 == nrow) && (col-2 == ncol)  && findDama(row+1,col-1).getColor() != d.getColor()) return findDama(row+1,col-1);
+           if((row+2 == nrow) && (col+2 == ncol)  && findDama(row+1,col+1).getColor() != d.getColor()) return findDama(row+1,col+1);
+           if((row-2 == nrow) && (col-2 == ncol)  && findDama(row-1,col-1).getColor() != d.getColor()) return findDama(row-1,col-1);
+           if((row-2 == nrow) && (col+2 == ncol)  && findDama(row-1,col+1).getColor() != d.getColor()) return findDama(row-1,col+1); 
+        }
+        
+        
+       return null;
     }
 }
